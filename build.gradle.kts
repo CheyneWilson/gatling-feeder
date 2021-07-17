@@ -1,6 +1,7 @@
 plugins {
     idea
     scala
+    signing
     `java-library`
     `maven-publish`
 }
@@ -36,7 +37,7 @@ java {
 
 publishing {
     publications {
-        create<MavenPublication>("maven") {
+        create<MavenPublication>("gatlingFeeder") {
             from(components["java"])
             pom {
                 name.set("Gatling Feeders")
@@ -63,4 +64,13 @@ publishing {
             }
         }
     }
+}
+
+val signingKeyId: String? by project
+val signingKey: String? by project
+val signingPassword: String? by project
+
+signing {
+    useInMemoryPgpKeys(signingKeyId, signingKey, signingPassword)
+    sign(publishing.publications["gatlingFeeder"])
 }
