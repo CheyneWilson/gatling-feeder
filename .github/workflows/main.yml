@@ -19,12 +19,20 @@ jobs:
   build:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
+    
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access itsigningPassword
       - uses: actions/checkout@v2
 
       # Runs a single command using the runners shell
       - name: Build
         run: ./gradlew build
+        
+      - name: Sign
+        env:
+          PGP_SIGNING_KEY: ${{ secrets.GPG_SIGNING_KEY }}
+          PGP_SIGNING_KEY_ID: ${{ secrets.GPG_SIGNING_KEY }}
+          PGP_SIGNING_PASSWORD: ${{ secrets.GPG_SIGNING_KEY }}
+        run: ./gradlew signGatlingFeederPublication -PsigningKey=$PGP_SIGNING_KEY -PsigningKeyIdy=$PGP_SIGNING_KEY_ID  -PsigningPassword=$PGP_SIGNING_PASSWORD 
