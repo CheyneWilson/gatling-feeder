@@ -24,7 +24,7 @@ jobs:
   build:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
-    environment: JavaBuild
+    # environment: JavaBuild
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -35,7 +35,11 @@ jobs:
       - name: Build
         run: ./gradlew build
         
-        
+  sign:
+    runs-on: ubuntu-latest
+    environment: JavaBuild
+    needs: build
+    steps:
       - name: Sign
         env:
           PGP_SIGNING_KEY: ${{ secrets.GPG_SIGNING_KEY }}
