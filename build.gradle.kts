@@ -70,7 +70,11 @@ val signingKeyId: String? by project
 val signingKey: String? by project
 val signingPassword: String? by project
 
+// We may pass the key in via a single line string - e.g. github actions. If so, we use \n for the new lines and need to
+// substitute them out.
+val signingKey2 = signingKey?.replace("\\n", "\n")
+
 signing {
-    useInMemoryPgpKeys(signingKeyId, signingKey, signingPassword)
+    useInMemoryPgpKeys(signingKeyId, signingKey2, signingPassword)
     sign(publishing.publications["gatlingFeeder"])
 }
