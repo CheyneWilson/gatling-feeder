@@ -12,9 +12,6 @@ on:
   pull_request:
     branches: [ main ]
   
-  
-
-
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
@@ -28,15 +25,19 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+      
+      - name: Validate Gradle wrapper
+        uses: gradle/wrapper-validation-action@e6e38bacfdf1a337459f332974bb2327a31aaf4b
+
       - name: Cache Gradle packages
         uses: actions/cache@v2
         with:
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
-      
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
 
       # Runs a single command using the runners shell
       - name: Build
