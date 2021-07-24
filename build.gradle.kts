@@ -1,33 +1,16 @@
-import me.qoomon.gradle.gitversioning.GitVersioningPluginConfig
-import me.qoomon.gradle.gitversioning.GitVersioningPluginConfig.*
-
 plugins {
     idea
     scala
     signing
     `java-library`
     `maven-publish`
-    id("me.qoomon.git-versioning") version "4.2.0"
+    id("com.palantir.git-version") version "0.12.3"
 }
 
 group = "nz.cheyne.gatling"
-//version = "0.0.1-SNAPSHOT-1"
 
-version = "0.0.1-SNAPSHOT"
-
-
-gitVersioning.apply(closureOf<GitVersioningPluginConfig> {
-    preferTags = true
-
-    branch(closureOf<VersionDescription> {
-        pattern = "main"
-        versionFormat = "\${version}"
-    })
-    tag(closureOf<VersionDescription> {
-        pattern = "(?i)SNAPSHOT-(?<tagVersion>[0-9].*)"
-        versionFormat = "\${version}-\${tagVersion}"
-    })
-})
+val gitVersion: groovy.lang.Closure<String> by extra
+version = gitVersion()
 
 repositories {
     mavenCentral()
